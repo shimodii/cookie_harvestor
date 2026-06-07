@@ -18,15 +18,15 @@ do
   parsed_access=$(echo $access_token | cut -c2- | rev | cut -c2- | rev)
   parsed_front=$(echo $front_token | cut -c2- | rev | cut -c2- | rev)
   file_name=$(echo $i | rev | cut -c5- | rev)
-  cookie="sAccessToken=$parsed_access; sFrontToken=$parsed_front;"
-  # echo "$cookie"
+  cookie="sAccessToken=$parsed_access; sFrontToken=$parsed_front"
+  echo "$cookie"
   # echo "access token: $access_token"
   # echo "front token: $front_token"
   # echo "phone_number: $file_name"
-  mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<EOF
-INSERT INTO divar_cookie (cookie, phone_number)
-VALUES ('$cookie', '$file_name')
-EOF
+#  mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<EOF
+#INSERT INTO divar_cookie (cookie, phone_number)
+#VALUES ('$cookie', '$file_name')
+#EOF
 done
 
 cd $PWD
