@@ -5,8 +5,22 @@ from playwright.async_api import async_playwright
 
 URL = "https://divar.ir/s/tehran"
 AUTH_ENDPOINT = "https://api.divar.ir/v8/auth/open-initiate-page"
-TARGET_COOKIES = {"sAccessToken", "sFrontToken"}
+TARGET_COOKIES = {"sAccessToken", "sFrontToken", "sRefreshToken"}
 OUTPUT_DIR = Path("output")
+
+
+async def get_all_cookies(context):
+    cookies = (
+        await context.cookies("https://divar.ir") +
+        await context.cookies("https://api.divar.ir/v8/authenticate/session/refresh")
+    )
+    seen = set()
+    unique = []
+    for c in cookies:
+        if c["name"] not in seen:
+            seen.add(c["name"])
+            unique.append(c)
+    return unique
 
 
 async def harvest_cookies():
@@ -36,17 +50,17 @@ async def harvest_cookies():
         print("Waiting for you to finish logging in...\n")
 
         for _ in range(90):
-            cookies = await context.cookies()
+            cookies = await get_all_cookies(context)
             cookie_names = {c["name"] for c in cookies}
 
-            if TARGET_COOKIES.issubset(cookie_names):
+            if {"sAccessToken", "sRefreshToken"}.issubset(cookie_names):
                 print("Login detected!")
                 break
 
             await asyncio.sleep(2)
         else:
             print("Timed out. Grabbing whatever cookies exist...")
-            cookies = await context.cookies()
+            cookies = await get_all_cookies(context)
 
         tokens = {c["name"]: c["value"] for c in cookies if c["name"] in TARGET_COOKIES}
 
