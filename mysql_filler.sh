@@ -21,14 +21,14 @@ do
   phone_number=$(echo $i | rev | cut -c5- | rev)
   # cookie="sAccessToken=$parsed_access; sFrontToken=$parsed_front"
   # echo "$cookie"
-  echo "access token: $access_token"
-  echo "front token: $front_token"
-  echo "phone number: $phone_number"
-  echo "refresh token: $refresh_token"
-#  mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<EOF
-#INSERT INTO divar_cookie (phone_number, refresh_token, access_token, front_token, updated_at, is_active)
-#VALUES ('$phone_number', '$refresh_token', '$access_token', '$front_token', $(date "+%s"), '1')
-#EOF
+  # echo "access token: $access_token"
+  # echo "front token: $front_token"
+  # echo "phone number: $phone_number"
+  # echo "refresh token: $refresh_token"
+  mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<EOF
+INSERT INTO divar_cookie (phone_number, refresh_token, access_token, front_token, updated_at, is_active)
+VALUES ('$phone_number', '$refresh_token', '$access_token', '$front_token', $(date "+%s"), '1')
+EOF
 done
 
 cd $PWD
