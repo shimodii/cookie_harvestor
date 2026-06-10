@@ -19,6 +19,7 @@ do
   # parsed_access=$(echo $access_token | cut -c2- | rev | cut -c2- | rev)
   # parsed_front=$(echo $front_token | cut -c2- | rev | cut -c2- | rev)
   phone_number=$(echo $i | rev | cut -c5- | rev)
+  echo "sAccessToken=$access_token; sFrontToken=$front_token"
   # cookie="sAccessToken=$parsed_access; sFrontToken=$parsed_front"
   # echo "$cookie"
   # echo "access token: $access_token"
